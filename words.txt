@@ -6,5 +6,5 @@ MAIN(){
     constructor(){}
         super()
     }    
-
+    let a;
 }
