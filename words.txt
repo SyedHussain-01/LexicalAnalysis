@@ -5,6 +5,7 @@ MAIN(){
     class B extends A{
     constructor(){}
         super()
-    }    
-
+    }
+   int a = +5;
+ 
 }
