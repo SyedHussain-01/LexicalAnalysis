@@ -184,7 +184,7 @@ splits.forEach((data,i)=>{
 
   }
 })
-console.log(splits)
+
 fs.writeFileSync('output.txt','')
 splits.forEach(data=>{
     fs.appendFileSync('output.txt',JSON.stringify({vp:data.vp,cp:data.cp,lineNo:data.lineNo}))
