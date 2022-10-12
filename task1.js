@@ -3,6 +3,7 @@ let regexForFloat=str=>/^([\+\-]?)[0-9]*\.[0-9]+$/g.test(str)
 let regexForId=str=>/^([a-zA-Z\_\$][a-zA-Z0-9\\d\$\_]*)$/g.test(str)
 let fs = require("fs");
 const data = fs.readFileSync("words.txt", { encoding: "utf-8" }).split("\n");
+console.log(data)
 const {operators,punctuators,breaks,keywords}=require('./breakers.js')
 var two="";
 var three="";
@@ -10,7 +11,8 @@ var checkThree;
 var checkTwo;
 var splits=[]
 let stringOpen = false;
-let backtickString=false
+let backtickString=false;
+let multiLineComment = false;
 var uploadToken=(str,lineNo,cp)=>splits.push({vp:str,cp:cp?cp:"",lineNo})
 const compare=(data,toCompareWith)=>data.vp==toCompareWith
 var temp=""
@@ -70,6 +72,16 @@ data.forEach((line,lineNo)=>{
           }
           else if (line[i]+line[i+1]=="//" && !stringOpen){
             i=line.length-1
+            }
+            else if (line[i]+line[i+1]=="/*" && !stringOpen && !multiLineComment){
+              multiLineComment = true;
+            }
+            else if (line[i] !== '*/' && multiLineComment){
+              temp+=line[i];
+              
+            }
+            else if (line[i] === "*/" && multiLineComment){
+              temp = "";
             }
             else if(operators.includes(line[i]+line[i+1]+line[i+2])){
               uploadToken(line[i]+line[i+1]+line[i+2],lineNo)

@@ -5,6 +5,11 @@ MAIN(){
     class B extends A{
     constructor(){}
         super()
-    }    
-    let a;
+    }
+   /*
+   let a;
+   let b;
+   let c;
+   let gb =5;
+   */
 }
