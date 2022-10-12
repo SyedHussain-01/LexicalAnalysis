@@ -3,7 +3,6 @@ let regexForFloat=str=>/^([\+\-]?)[0-9]*\.[0-9]+$/g.test(str)
 let regexForId=str=>/^([a-zA-Z\_\$][a-zA-Z0-9\\d\$\_]*)$/g.test(str)
 let fs = require("fs");
 const data = fs.readFileSync("words.txt", { encoding: "utf-8" }).split("\n");
-console.log(data)
 const {operators,punctuators,breaks,keywords,dataTypes}=require('./breakers.js')
 var two="";
 var three="";
@@ -169,7 +168,6 @@ splits.forEach((data,i)=>{
 
     }
 })
-console.log(splits)
 splits.forEach((data,i)=>{
   if(data.cp=="PM" && splits[i+1].vp>=0 && (splits[i-1].cp=="="||splits[i-1].cp=="CO")){
     data.vp=data.vp+splits[i+1].vp
