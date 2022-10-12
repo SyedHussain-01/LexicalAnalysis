@@ -4,7 +4,7 @@ let regexForId=str=>/^([a-zA-Z\_\$][a-zA-Z0-9\\d\$\_]*)$/g.test(str)
 let fs = require("fs");
 const data = fs.readFileSync("words.txt", { encoding: "utf-8" }).split("\n");
 console.log(data)
-const {operators,punctuators,breaks,keywords}=require('./breakers.js')
+const {operators,punctuators,breaks,keywords,dataTypes}=require('./breakers.js')
 var two="";
 var three="";
 var checkThree;
@@ -161,17 +161,24 @@ splits.forEach((data,i)=>{
         else if(compare(data,"<=")||compare(data,">=")||compare(data,"==")||compare(data,"!=")||compare(data,">")||compare(data,"<")||compare(data,"!==")||compare(data,"===")) data.cp ="ROP"
         else if(compare(data,"+=")||compare(data,"-=")||compare(data,"/=")||compare(data,"*=")||compare(data,"%=")) data.cp="CO"
         else if(compare(data,"||") || compare(data,"&&") ) data.cp="logical operator"
-        else if(regexForFloat(data.vp)||regexForInt(data.vp)) data.cp="Number"
-        else if(punctuators.includes(data.vp) || keywords.includes(data.vp)) data.cp=data.vp
+        else if(regexForFloat(data.vp)) data.cp="Float"
+        else if(regexForInt(data.vp)) data.cp="Integer"
+        else if(punctuators.includes(data.vp) || keywords.includes(data.vp) || dataTypes.includes(data.vp)) data.cp=data.vp
         else if(regexForId(data.vp)) data.cp="Id"
         else data.cp="invalid"
 
     }
 })
+console.log(splits)
 splits.forEach((data,i)=>{
   if(data.cp=="PM" && splits[i+1].vp>=0 && (splits[i-1].cp=="="||splits[i-1].cp=="CO")){
     data.vp=data.vp+splits[i+1].vp
-    data.cp="Number"
+    if(regexForFloat(data.vp)){
+      data.cp = "Float";
+    }
+    else if (regexForInt(data.vp)){
+      data.cp = "Integer";
+    }
     if(data.vp.includes("+")){
       data.vp=data.vp.slice(1,data.vp.length)
     }
@@ -179,6 +186,7 @@ splits.forEach((data,i)=>{
 
   }
 })
+console.log(splits)
 fs.writeFileSync('output.txt','')
 splits.forEach(data=>{
     fs.appendFileSync('output.txt',JSON.stringify({vp:data.vp,cp:data.cp,lineNo:data.lineNo}))

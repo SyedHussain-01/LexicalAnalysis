@@ -37,54 +37,39 @@ let operators = [
     "'","?"
   ];
   let keywords = [
-    "await",
     "break",
     "case",
     "catch",
     "class",
-    "const",
     "continue",
-    "debugger","constructor",
+    "constructor",
     "default",
-    "delete",
     "do",
     "else",
-    "enum",
-    "export",
     "extends",
     "false",
-    "finally",
     "for",
-    "function",
+    "Func",
     "if",
-    "implements",
-    "import",
-    "interface",
-    "instanceof",
-    "in",
-    "let",
     "new",
     "null",
-    "package",
-    "private",
-    "protected",
-    "public",
     "return",
     "super",
     "switch",
-    "static",
     "this",
     "throw",
     "try",
     "true",
-    "typeof",
-    "var",
-    "void",
     "while",
-    "with",
-    "yield",
-    "MAIN","call"
+    "MAIN",
   ];
-let breaks = [...operators, ...punctuators, ...keywords," ","\t"];
+  let dataTypes = [
+    "int",
+    "float",
+    "char",
+    "string",
+    "bool"
+  ]
+let breaks = [...operators, ...punctuators, ...keywords,...dataTypes," ","\t"];
 // let PO=[...operators,...punctuators]
-module.exports={operators,punctuators,keywords,breaks}
+module.exports={operators,punctuators,keywords,breaks,dataTypes}

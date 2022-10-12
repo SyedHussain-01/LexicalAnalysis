@@ -6,10 +6,6 @@ MAIN(){
     constructor(){}
         super()
     }
-   /*
-   let a;
-   let b;
-   let c;
-   let gb =5;
-   */
+   int a = +5;
+ 
 }
