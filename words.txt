@@ -7,5 +7,8 @@ MAIN(){
         super()
     }
    int a = +5;
+   if(int i=0;i<5;i++){
+    i
+   }
  
 }

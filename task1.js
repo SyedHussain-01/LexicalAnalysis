@@ -12,6 +12,7 @@ var splits=[]
 let stringOpen = false;
 let backtickString=false;
 let multiLineComment = false;
+let paranthesisOpen = false;
 var uploadToken=(str,lineNo,cp)=>splits.push({vp:str,cp:cp?cp:"",lineNo})
 const compare=(data,toCompareWith)=>data.vp==toCompareWith
 var temp=""
@@ -52,23 +53,23 @@ data.forEach((line,lineNo)=>{
             temp=""
             backtickString=true
           }
-          else if (backtickString && line[i]!='`'){
-            temp+=line[i]
-             if(lineNo==data.length && i==line.length-1){
-                uploadToken(temp,lineNo,"invalid token");
-              }
-          }
-          else if(line[i]=='`'&& backtickString){
-            if(line[i-1]!=="\\"){
-            backtickString=false;
-            uploadToken(temp,lineNo,"String")
-            temp=""
-            }
-            else{
-              temp=temp.slice(0,temp.length-1)
-              temp+=line[i]
-            }
-          }
+          // else if (backtickString && line[i]!='`'){
+          //   temp+=line[i]
+          //    if(lineNo==data.length && i==line.length-1){
+          //       uploadToken(temp,lineNo,"invalid token");
+          //     }
+          // }
+          // else if(line[i]=='`'&& backtickString){
+          //   if(line[i-1]!=="\\"){
+          //   backtickString=false;
+          //   uploadToken(temp,lineNo,"String")
+          //   temp=""
+          //   }
+          //   else{
+          //     temp=temp.slice(0,temp.length-1)
+          //     temp+=line[i]
+          //   }
+          // }
           else if (line[i]+line[i+1]=="//" && !stringOpen){
             i=line.length-1
             }
