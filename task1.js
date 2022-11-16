@@ -8,12 +8,21 @@ var two="";
 var three="";
 var checkThree;
 var checkTwo;
+let curlyBracketCounter = 0;
+let wordSplitterArray = [];
+let curlyBracketsOpen = false;
 var splits=[]
 let stringOpen = false;
 let backtickString=false;
 let multiLineComment = false;
 let paranthesisOpen = false;
-var uploadToken=(str,lineNo,cp)=>splits.push({vp:str,cp:cp?cp:"",lineNo})
+var uploadToken=(str,lineNo,cp)=>{
+  if(str === " "){
+    return;
+  }
+  wordSplitterArray.push(str);
+  splits.push({vp:str,cp:cp?cp:"",lineNo})
+}
 const compare=(data,toCompareWith)=>data.vp==toCompareWith
 var temp=""
 data.forEach((line,lineNo)=>{
@@ -22,7 +31,6 @@ data.forEach((line,lineNo)=>{
       temp="";
     }
     for (let i= 0; i<line.length; i++) {
-        // console.log(line[i])
         if(line[i]=='"' && !stringOpen && !backtickString){
             stringOpen=true;
             // uploadToken(temp,lineNo);
@@ -70,18 +78,69 @@ data.forEach((line,lineNo)=>{
           //     temp+=line[i]
           //   }
           // }
+          else if (line[i]=== '('){
+            paranthesisOpen = true
+            temp+= line[i]
+            uploadToken(temp,lineNo)
+            temp='';
+          }
+          else if ( line [i] !== ")" && i === line.length-1 && paranthesisOpen ){
+            temp+=line[i]
+            uploadToken(temp,lineNo,"invalid token");
+            paranthesisOpen = false;
+            temp=""
+          }
+          else if (line[i]=== ')' && paranthesisOpen){
+            paranthesisOpen=false;
+            temp += line[i]
+            uploadToken(temp,lineNo)
+            temp=""
+          }
+          else if (line[i] === "{"){
+            curlyBracketCounter = curlyBracketCounter + 1;
+            curlyBracketsOpen = true;
+            temp += line[i];
+            uploadToken(temp,lineNo);
+            temp ='';
+          }
+          else if (line[i] === "}" && curlyBracketsOpen && lineNo !== data.length){
+            curlyBracketCounter = curlyBracketCounter - 1;
+            if(curlyBracketCounter<=0){
+              curlyBracketsOpen = false;
+            }
+            temp += line[i];
+            uploadToken(temp,lineNo);
+            temp ='';
+          }
+          else if (line[i] === "}" && curlyBracketsOpen && curlyBracketCounter === 1){
+            curlyBracketCounter = curlyBracketCounter - 1;
+            curlyBracketsOpen = false;
+            temp += line[i];
+            uploadToken(temp,lineNo);
+            temp ='';
+          }
+          else if (curlyBracketCounter>0 && curlyBracketsOpen && lineNo === data.length ){
+            curlyBracketsOpen = false;
+            temp+=line[i]
+            uploadToken(temp,lineNo,"invalid token");
+            temp=""
+          }
+          // else if (curlyBracketsOpen && line[i] !== '}'){
+          //   temp+=line[i];
+          // }
           else if (line[i]+line[i+1]=="//" && !stringOpen){
             i=line.length-1
             }
             else if (line[i]+line[i+1]=="/*" && !stringOpen && !multiLineComment){
               multiLineComment = true;
             }
-            else if (line[i] !== '*/' && multiLineComment){
+            else if (line[i]+line[i+1] !== '*/' && multiLineComment){
               temp+=line[i];
-              
             }
-            else if (line[i] === "*/" && multiLineComment){
+            else if (line[i]+line[i+1]=== "*/" && multiLineComment){
               temp = "";
+              multiLineComment = false;
+              i++;
             }
             else if(operators.includes(line[i]+line[i+1]+line[i+2])){
               uploadToken(line[i]+line[i+1]+line[i+2],lineNo)
@@ -100,7 +159,7 @@ data.forEach((line,lineNo)=>{
         else if(i==line.length-1){
             uploadToken(temp,lineNo)
             temp=""
-        }
+        } 
     }
     // }
 }
@@ -195,3 +254,4 @@ splits.forEach(data=>{
 })
 // fs.appendFileSync('output.txt',JSON.stringify({vp:"endMarker",cp:"endMarker",lineNo:data.length-1}))
 console.log(splits);
+console.log(wordSplitterArray)
