@@ -1,14 +1,19 @@
 MAIN(){
     class A{
-
     }
     class B extends A{
     constructor(){}
         super()
     }
-   int a = +5;
-   if(int i=0;i<5;i++){
-    i
-   }
- 
+
+    /*
+    let a = 5;
+    let b = 6 ;
+    let c = a - b;
+    */
+    if(true){
+        return ;
+    }else{
+
+    }
 }
