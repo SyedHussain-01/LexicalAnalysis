@@ -50,6 +50,7 @@ let operators = [
     "false",
     "for",
     "Func",
+    "func",
     "if",
     "new",
     "null",

@@ -31,7 +31,7 @@ data.forEach((line,lineNo)=>{
       temp="";
     }
     for (let i= 0; i<line.length; i++) {
-        if(line[i]=='"' && !stringOpen && !backtickString){
+        if(line[i]=='"' && !stringOpen && !backtickString && !multiLineComment){
             stringOpen=true;
             // uploadToken(temp,lineNo);
           }
@@ -78,53 +78,53 @@ data.forEach((line,lineNo)=>{
           //     temp+=line[i]
           //   }
           // }
-          else if (line[i]=== '('){
+          else if (line[i]=== '(' && !multiLineComment){
             paranthesisOpen = true
             temp+= line[i]
             uploadToken(temp,lineNo)
             temp='';
           }
-          else if ( line [i] !== ")" && i === line.length-1 && paranthesisOpen ){
+          else if ( line [i] !== ")" && i === line.length-1 && paranthesisOpen && !multiLineComment){
             temp+=line[i]
             uploadToken(temp,lineNo,"invalid token");
             paranthesisOpen = false;
             temp=""
           }
-          else if (line[i]=== ')' && paranthesisOpen){
+          else if (line[i]=== ')' && paranthesisOpen && !multiLineComment){
             paranthesisOpen=false;
             temp += line[i]
             uploadToken(temp,lineNo)
             temp=""
           }
-          else if (line[i] === "{"){
-            curlyBracketCounter = curlyBracketCounter + 1;
-            curlyBracketsOpen = true;
-            temp += line[i];
-            uploadToken(temp,lineNo);
-            temp ='';
-          }
-          else if (line[i] === "}" && curlyBracketsOpen && lineNo !== data.length){
-            curlyBracketCounter = curlyBracketCounter - 1;
-            if(curlyBracketCounter<=0){
-              curlyBracketsOpen = false;
-            }
-            temp += line[i];
-            uploadToken(temp,lineNo);
-            temp ='';
-          }
-          else if (line[i] === "}" && curlyBracketsOpen && curlyBracketCounter === 1){
-            curlyBracketCounter = curlyBracketCounter - 1;
-            curlyBracketsOpen = false;
-            temp += line[i];
-            uploadToken(temp,lineNo);
-            temp ='';
-          }
-          else if (curlyBracketCounter>0 && curlyBracketsOpen && lineNo === data.length ){
-            curlyBracketsOpen = false;
-            temp+=line[i]
-            uploadToken(temp,lineNo,"invalid token");
-            temp=""
-          }
+          // else if (line[i] === "{"){
+          //   curlyBracketCounter = curlyBracketCounter + 1;
+          //   curlyBracketsOpen = true;
+          //   temp += line[i];
+          //   uploadToken(temp,lineNo);
+          //   temp ='';
+          // }
+          // else if (line[i] === "}" && curlyBracketsOpen && lineNo !== data.length){
+          //   curlyBracketCounter = curlyBracketCounter - 1;
+          //   if(curlyBracketCounter<=0){
+          //     curlyBracketsOpen = false;
+          //   }
+          //   temp += line[i];
+          //   uploadToken(temp,lineNo);
+          //   temp ='';
+          // }
+          // else if (line[i] === "}" && curlyBracketsOpen && curlyBracketCounter === 1 ){
+          //   curlyBracketCounter = curlyBracketCounter - 1;
+          //   curlyBracketsOpen = false;
+          //   temp += line[i];
+          //   uploadToken(temp,lineNo);
+          //   temp ='';
+          // }
+          // else if (curlyBracketCounter>0 && curlyBracketsOpen && lineNo === data.length ){
+          //   curlyBracketsOpen = false;
+          //   temp+=line[i]
+          //   uploadToken(temp,lineNo,"invalid token");
+          //   temp=""
+          // }
           // else if (curlyBracketsOpen && line[i] !== '}'){
           //   temp+=line[i];
           // }
